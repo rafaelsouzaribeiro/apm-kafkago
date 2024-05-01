@@ -4,7 +4,6 @@ go 1.22.0
 
 require (
 	github.com/segmentio/kafka-go v0.4.47
-	go.elastic.co/apm/module/apmhttp/v2 v2.6.0
 	go.elastic.co/apm/v2 v2.6.0
 )
 

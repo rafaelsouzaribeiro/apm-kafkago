@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/segmentio/kafka-go"
-	"go.elastic.co/apm/module/apmhttp/v2"
 	"go.elastic.co/apm/v2"
 )
 
@@ -37,8 +36,8 @@ func (w *Writer) WriteMessages(ctx context.Context, msgs ...kafka.Message) error
 		span, _ := apm.StartSpan(ctx, "Produce "+string(msgs[i].Key), spanWriteMessageType)
 		span.Context.SetLabel("topic", w.W.Topic)
 		span.Context.SetLabel("key", string(msgs[i].Key))
-		traceParent := apmhttp.FormatTraceparentHeader(span.TraceContext())
-		w.addTraceparentHeader(&msgs[i], traceParent)
+		// traceParent := apmhttp.FormatTraceparentHeader(span.TraceContext())
+		// w.addTraceparentHeader(&msgs[i], traceParent)
 		span.End()
 	}
 	err := w.W.WriteMessages(ctx, msgs...)
@@ -48,9 +47,9 @@ func (w *Writer) WriteMessages(ctx context.Context, msgs ...kafka.Message) error
 	return err
 }
 
-func (w *Writer) addTraceparentHeader(msg *kafka.Message, traceParent string) {
-	msg.Headers = append(msg.Headers, kafka.Header{
-		Key:   apmhttp.W3CTraceparentHeader,
-		Value: []byte(traceParent),
-	})
-}
+// func (w *Writer) addTraceparentHeader(msg *kafka.Message, traceParent string) {
+// 	msg.Headers = append(msg.Headers, kafka.Header{
+// 		Key:   apmhttp.W3CTraceparentHeader,
+// 		Value: []byte(traceParent),
+// 	})
+// }
